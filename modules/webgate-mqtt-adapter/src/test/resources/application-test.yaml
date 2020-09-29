@@ -37,7 +37,7 @@ spring:
         queue-capacity: 100000
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:p6spy:hsqldb:mem:documentdb;DATABASE_TO_LOWER=TRUE;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;
+    url: jdbc:p6spy:hsqldb:mem:devicedb;DATABASE_TO_LOWER=TRUE;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;
     driver-class-name: org.hsqldb.jdbc.JDBCDriver
     username: sa
     password:

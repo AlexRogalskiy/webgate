@@ -62,7 +62,7 @@ mvnw -s settings.xml clean package -Pmodule_java,test-jar,xsd,jib -DskipTests -D
 Run PostgreSQL in docker-container via command:
 
 ```text
-docker run --name db-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=documentdb -p 5432:5432 -d postgres
+docker run --name db-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=devicedb -p 5432:5432 -d postgres
 ```
 
 ```text

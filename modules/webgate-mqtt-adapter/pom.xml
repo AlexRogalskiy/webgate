@@ -535,9 +535,9 @@
                             <mainClass>org.hsqldb.server.Server</mainClass>
                             <arguments>
                                 <argument>--database.0</argument>
-                                <argument>file:${project.build.directory}/db/documentdb</argument>
+                                <argument>file:${project.build.directory}/db/devicedb</argument>
                                 <argument>--dbname.0</argument>
-                                <argument>documentdb</argument>
+                                <argument>devicedb</argument>
                             </arguments>
                         </configuration>
                         <executions>

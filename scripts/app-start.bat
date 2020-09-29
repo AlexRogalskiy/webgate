@@ -5,7 +5,7 @@ set DB_HOST=localhost
 set DB_PORT=5432
 set DB_USER=postgres
 set DB_PASS=password
-set DB_NAME=documentdb
+set DB_NAME=devicedb
 
 rem initializing generator environment variables
 set DOC_STORAGE_PATH=~/home
