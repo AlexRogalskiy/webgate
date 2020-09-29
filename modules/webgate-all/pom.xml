@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sensiblemetrics.api</groupId>
+        <artifactId>webgate-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../../</relativePath>
+    </parent>
+
+    <name>com.sensiblemetrics.api</name>
+    <description>WebGate All Bundle</description>
+    <artifactId>webgate-all</artifactId>
+    <packaging>jar</packaging>
+    <url>https://github.com/AlexRogalskiy/webgate/tree/master/modules/webgate-all</url>
+    <inceptionYear>2020</inceptionYear>
+
+    <properties>
+        <sensiblemetrics.version>0.1.0-SNAPSHOT</sensiblemetrics.version>
+    </properties>
+
+    <dependencies>
+        <!-- SensibleMetrics library dependencies -->
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-admin</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-actuator</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-caching</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-commons</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-mqtt-adapter</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-executor</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-logger</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-metrics</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-router</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-security</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,31 @@
+# SensibleMetrics WebGate Router test configuration
+---
+spring:
+  messages:
+    encoding: UTF-8
+    basename: i18n/messages
+    # 1 hour
+    cache-duration: 3600
+  main:
+    allow-bean-definition-overriding: true
+  task:
+    execution:
+      thread-name-prefix: test
+      pool:
+        core-size: 10
+        max-size: 20
+        queue-capacity: 100000
+
+webgate:
+  router:
+    local:
+      username: mqttPubClient
+      password: 123456
+      clean-session: false
+      server-uris:
+        - tcp://localhost:1883
+      async: true
+      completion-timeout: 20000
+      keep-alive-interval: 30
+      client-id: mqttPubClient
+      default-qos: 1
