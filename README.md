@@ -73,7 +73,7 @@ java -jar com.sensiblemetrics.api.webgate-mqtt-adapter-0.1.0-SNAPSHOT-exec.jar
 where
 
 ```text
-project.build.directory=modules/document-generator/.build/bin/com.sensiblemetrics.api.webgate.mqtt.adapter
+project.build.directory=modules/webgate-mqtt-adapter/.build/bin/com.sensiblemetrics.api.webgate.mqtt.adapter
 ```
 
 or simply run:
@@ -84,7 +84,7 @@ scripts/run.bat
 
 ## Deploy with Kubectl
 
-#### 1. Start the document service:
+#### 1. Start the WebGate MQTT Adapter service:
 
 ```text
 kubectl run spring-boot-jib --image=$IMAGE --port=8080 --restart=Never
