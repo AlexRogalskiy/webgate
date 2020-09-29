@@ -57,29 +57,6 @@ buidling and deploying docker image to DockerHub:
 mvnw -s settings.xml clean package -Pmodule_java,test-jar,xsd,jib -DskipTests -Denv.DOCKERHUB_USERNAME=<username> -Denv.DOCKERHUB_PASSWORD=<password>
 ```
 
-run local build/deployment process:
-
-```text
-skaffold config set --global local-cluster true
-skaffold dev --trigger notify
-```
-
-## Run with Skaffold
-
-In order to run the `webgate` service using _skaffold_, you need to have the _DocumentDB_ up and running:
-
-#### 1. Start the document DB \(postgres\):
-
-```text
-skaffold run -p documents-db-local
-```
-
-#### 2. Start the webgate service:
-
-```text
-skaffold run -p local
-```
-
 ## Run with containerized PostgreSQL
 
 Run PostgreSQL in docker-container via command:
