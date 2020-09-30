@@ -20,12 +20,10 @@ ARG JAR_FILE
 
 # Add the application's jar to the container
 ADD ${JAR_FILE} /opt/app/com.sensiblemetrics.api.webgate.mqtt.adapter.jar
-ADD entrypoint.sh /opt/app/entrypoint.sh
+ADD modules/webgate-mqtt-adapter/src/main/docker/java/entrypoint.sh /opt/app/entrypoint.sh
 
 # Set workdir inside container
 WORKDIR /opt/app
-
-RUN bash -c 'touch /com.sensiblemetrics.api.webgate.mqtt.adapter.jar'
 
 # Expose service default port
 EXPOSE 8888
@@ -34,4 +32,4 @@ EXPOSE 8888
 ENV TERM xterm
 
 # Run microservice process.
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT [ "./entrypoint.sh" ]
