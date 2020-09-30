@@ -7,10 +7,6 @@ set DB_USER=postgres
 set DB_PASS=password
 set DB_NAME=devicedb
 
-rem initializing generator environment variables
-set DOC_STORAGE_PATH=~/home
-set DOC_TEMPLATE_NAME=template/template.docx
-
 rem running postgresql docker image
 docker run --name db-postgres -e POSTGRES_USER=%DB_USER% -e POSTGRES_PASSWORD=%DB_PASS% -e POSTGRES_DB=%DB_NAME% -p %DB_PORT%:5432 -d postgres
 

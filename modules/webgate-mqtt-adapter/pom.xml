@@ -294,7 +294,6 @@
                 <configuration>
                     <encoding>${project.build.outputEncoding}</encoding>
                     <nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>docx</nonFilteredFileExtension>
                         <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
