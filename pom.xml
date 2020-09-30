@@ -2522,12 +2522,6 @@
                 </compilerArgs>
                 <java.version>11</java.version>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.glassfish.jaxb</groupId>
-                    <artifactId>jaxb-runtime</artifactId>
-                </dependency>
-            </dependencies>
             <build>
                 <plugins>
                     <plugin>

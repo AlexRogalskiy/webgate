@@ -36,7 +36,6 @@
         <liquibase.version>4.0.0</liquibase.version>
         <maven-exec-plugin.version>1.6.0</maven-exec-plugin.version>
 
-        <maven-jaxb2-plugin.version>2.5.0</maven-jaxb2-plugin.version>
         <maven-liquibase-plugin.version>4.0.0</maven-liquibase-plugin.version>
         <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
         <modelmapper.version>2.3.8</modelmapper.version>
@@ -268,10 +267,6 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>${project.basedir}/src/main/resources</directory>
-            </resource>
-            <resource>
-                <filtering>true</filtering>
-                <directory>${project.build.directory}/generated-sources/jaxb</directory>
             </resource>
         </resources>
         <testResources>

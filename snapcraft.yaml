@@ -27,7 +27,7 @@ parts:
       - -Dmaven.javadoc.skip=false
       - -B
       - -V
-      - -P"module_java","test-jar","xsd","dev"
+      - -P"module_java","test-jar","dev"
     override-build: |
       snapcraftctl build
       unzip -o DIST/webgate-*.zip -d $SNAPCRAFT_PART_INSTALL/

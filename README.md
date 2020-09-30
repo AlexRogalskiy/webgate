@@ -29,32 +29,32 @@ Application can be used for creating and editing electronic devices profiles
 ### For JDK 8
 
 ```text
-mvnw clean install spring-boot:repackage -Pnon_module_java,test-jar,xsd -DskipTests
+mvnw clean install spring-boot:repackage -Pnon_module_java,test-jar -DskipTests
 ```
 
 to build image to Docker daemon:
 
 ```text
-mvnw clean install -Pnon_module_java,test-jar,xsd,jib -DskipTests
+mvnw clean install -Pnon_module_java,test-jar,jib -DskipTests
 ```
 
 ### For JDK 11
 
 ```text
-mvnw clean install spring-boot:repackage -Pmodule_java,test-jar,xsd,jib -DskipTests
+mvnw clean install spring-boot:repackage -Pmodule_java,test-jar,jib -DskipTests
 ```
 
 building image to Docker daemon:
 
 ```text
-mvnw clean package -Pmodule_java,test-jar,xsd,jib -DskipTests
+mvnw clean package -Pmodule_java,test-jar,jib -DskipTests
 
 ```
 
 buidling and deploying docker image to DockerHub:
 
 ```text
-mvnw -s settings.xml clean package -Pmodule_java,test-jar,xsd,jib -DskipTests -Denv.DOCKERHUB_USERNAME=<username> -Denv.DOCKERHUB_PASSWORD=<password>
+mvnw -s settings.xml clean package -Pmodule_java,test-jar,jib -DskipTests -Denv.DOCKERHUB_USERNAME=<username> -Denv.DOCKERHUB_PASSWORD=<password>
 ```
 
 ## Run with containerized PostgreSQL

@@ -59,7 +59,7 @@ jobs:
 
       - name: Maven Package
         run: |
-          ./mvnw -B clean compile package --errors --batch-mode -DskipTests=true -P"module_java","test-jar","xsd","dev"
+          ./mvnw -B clean compile package --errors --batch-mode -DskipTests=true -P"module_java","test-jar","dev"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
