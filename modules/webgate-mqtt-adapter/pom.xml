@@ -19,9 +19,9 @@
 
     <properties>
         <spring-boot-thin.version>1.0.25.RELEASE</spring-boot-thin.version>
+        <spring-integration.version>5.3.2.RELEASE</spring-integration.version>
 
         <eclipse-paho-client.version>1.2.5</eclipse-paho-client.version>
-        <docx4j.version>6.1.2</docx4j.version>
         <hibernate-core.version>6.0.0.Alpha6</hibernate-core.version>
         <hibernate-types.version>2.9.13</hibernate-types.version>
         <cache-api.version>1.1.1</cache-api.version>
@@ -30,7 +30,6 @@
         <hikari.version>3.4.5</hikari.version>
 
         <image.to.path>registry.hub.docker.com/alexanderr/webgate</image.to.path>
-        <jaxb2-basics.version>1.11.1-PUBLISHED-BY-MISTAKE</jaxb2-basics.version>
         <liquibase-slf4j.version>3.0.0</liquibase-slf4j.version>
 
         <liquibase.propertyFile>${project.basedir}/src/main/resources/liquibase.properties</liquibase.propertyFile>
@@ -76,12 +75,18 @@
         <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-core</artifactId>
-            <version>5.3.2.RELEASE</version>
+            <version>${spring-integration.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-mqtt</artifactId>
-            <version>5.3.2.RELEASE</version>
+            <version>${spring-integration.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-module-kotlin</artifactId>
+                    <groupId>com.fasterxml.jackson.module</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Liquibase library dependencies -->
@@ -148,27 +153,6 @@
             </exclusions>
         </dependency>
 
-        <!-- Docx4j library dependencies -->
-        <dependency>
-            <groupId>org.docx4j</groupId>
-            <artifactId>docx4j</artifactId>
-            <version>${docx4j.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.commons</groupId>
-                    <artifactId>commons-compress</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- Hibernate ORM library dependencies -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
@@ -192,7 +176,7 @@
             <version>${hibernate-core.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-jcache</artifactId>
             <version>${hibernate-core.version}</version>
         </dependency>
@@ -225,13 +209,6 @@
                     <artifactId>jaxb-runtime</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <!-- Jaxb2 library dependencies -->
-        <dependency>
-            <groupId>org.jvnet.jaxb2_commons</groupId>
-            <artifactId>jaxb2-basics</artifactId>
-            <version>${jaxb2-basics.version}</version>
         </dependency>
 
         <!-- Liquibase library dependencies -->
@@ -272,7 +249,7 @@
 
         <!-- SensibleMetrics test library dependencies -->
         <dependency>
-            <groupId>com.sensiblemetrics.api.ws</groupId>
+            <groupId>com.sensiblemetrics.api</groupId>
             <artifactId>webgate-commons</artifactId>
             <version>${sensiblemetrics.version}</version>
             <classifier>tests</classifier>
@@ -305,19 +282,6 @@
         </testResources>
 
         <plugins>
-            <!--        mvn jasypt:encrypt-value -Djasypt.encryptor.password="the password" -Djasypt.plugin.value="theValueYouWantToEncrypt"-->
-            <!--        mvn jasypt:encrypt -Djasypt.encryptor.password="the password"-->
-            <!--        mvn jasypt:decrypt-value -Djasypt.encryptor.password="the password" -Djasypt.plugin.value="DbG1GppXOsFa2G69PnmADvQFI3esceEhJYbaEIKCcEO5C85JEqGAhfcjFMGnoRFf"-->
-            <!--        mvn jasypt:decrypt -Djasypt.encryptor.password="the password"-->
-            <!--        mvn jasypt:reencrypt -Djasypt.plugin.old.password=OLD -Djasypt.encryptor.password=NEW-->
-            <!--        mvn jasypt:upgrade -Djasypt.encryptor.password=EXAMPLE-->
-            <!--        mvn jasypt:load flyway:migrate -Djasypt.encryptor.password="the password"-->
-            <!--        mvn jasypt:encrypt -Djasypt.plugin.path="file:src/main/test/application.properties" -Djasypt.encryptor.password="the password"-->
-            <!--        mvn jasypt:encrypt -Djasypt.plugin.path="file:src/main/resources/flyway.properties" -Djasypt.encryptor.password="the password"-->
-            <!--        mvn jasypt:encrypt -Djasypt.plugin.path="file:src/main/resources/application.yaml" -Djasypt.encryptor.password="the password"-->
-            <!--        mvn jasypt:encrypt -Dspring.profiles.active=cloud -Djasypt.encryptor.password="the password"-->
-            <!--        mvn jasypt:decrypt -Djasypt.plugin.path="file:src/main/resources/application.yaml" -Djasypt.encryptor.password="the password"-->
-            <!--        mvn jasypt:encrypt -Djasypt.plugin.path="file:src/main/resources/application.yaml" -Djasypt.encryptor.password="the password"-->
             <plugin>
                 <groupId>com.github.ulisesbocchio</groupId>
                 <artifactId>jasypt-maven-plugin</artifactId>
@@ -331,6 +295,7 @@
                     <encoding>${project.build.outputEncoding}</encoding>
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>docx</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
@@ -571,59 +536,6 @@
                             <verbose>true</verbose>
                             <logging>debug</logging>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- Xsd profile -->
-        <profile>
-            <id>xsd</id>
-            <properties>
-                <packageName>com.sensiblemetrics.api.ws.document.generator.generated</packageName>
-                <schema.directory>${project.basedir}/src/main/resources/schemas</schema.directory>
-                <xjc.skip>false</xjc.skip>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>jaxb2-maven-plugin</artifactId>
-                        <version>${maven-jaxb2-plugin.version}</version>
-                        <configuration>
-                            <skipXjc>${xjc.skip}</skipXjc>
-                            <addGeneratedAnnotation>true</addGeneratedAnnotation>
-                            <createJavaDocAnnotations>true</createJavaDocAnnotations>
-                            <failOnNoSchemas>true</failOnNoSchemas>
-                            <generateEpisode>true</generateEpisode>
-                            <noGeneratedHeaderComments>true</noGeneratedHeaderComments>
-                            <clearOutputDir>true</clearOutputDir>
-                            <packageName>${packageName}</packageName>
-                            <sources>
-                                <source>${schema.directory}</source>
-                            </sources>
-                            <arguments>
-                                <argument>-XtoString</argument>
-                                <argument>-Xequals</argument>
-                                <argument>-XhashCode</argument>
-                            </arguments>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.jvnet.jaxb2_commons</groupId>
-                                <artifactId>jaxb2-basics</artifactId>
-                                <version>${jaxb2-basics.version}</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <id>xjc</id>
-                                <goals>
-                                    <goal>xjc</goal>
-                                </goals>
-                                <phase>generate-sources</phase>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>

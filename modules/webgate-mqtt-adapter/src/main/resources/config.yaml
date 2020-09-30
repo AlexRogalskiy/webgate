@@ -1,4 +1,17 @@
 webgate:
+  mqtt:
+    global:
+      username: mqttPubClient
+      password: 123456
+      cleanSession: false
+      serverURIs:
+        - tcp://localhost:1883
+      async: true
+      completionTimeout: 20000
+      keepAliveInterval: 30
+      clientId: mqttPubClient
+      defaultQos: 1
+
   metrics:
     defaults:
       description: WebGate Generator Service

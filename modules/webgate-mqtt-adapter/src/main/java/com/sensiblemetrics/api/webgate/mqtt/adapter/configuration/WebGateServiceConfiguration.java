@@ -4,7 +4,6 @@ import com.sensiblemetrics.api.webgate.router.client.MqttClientMessageHandler;
 import com.sensiblemetrics.api.webgate.router.configuration.RouterConfigurationProvider;
 import com.sensiblemetrics.api.webgate.router.property.WebGateRouterProperty;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -22,9 +21,9 @@ import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.endpoint.MessageProducerSupport;
+import org.springframework.integration.handler.LoggingHandler;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
-import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 
 import java.util.List;
@@ -68,15 +67,15 @@ public class WebGateServiceConfiguration {
         /**
          * Default global property key
          */
-        public static final String WEBGATE_GLOBAL_ENDPOINT_KEY = "global";
+        public static final String MQTT_GLOBAL_ENDPOINT_KEY = "global";
 
         @Bean
         @ServiceActivator(inputChannel = "mqttPromiseOutboundChannel")
         @Description("MQTT global message client bean")
-        public MqttClientMessageHandler mqttPromiseOutbound(final WebGateRouterProperty.RouterProducer globalRouterEndpoint,
-                                                            final MqttPahoClientFactory globalMqttClientFactory,
+        public MqttClientMessageHandler mqttPromiseOutbound(final WebGateRouterProperty.RouterProducer mqttProducerRouterEndpoint,
+                                                            final MqttPahoClientFactory mqttClientFactory,
                                                             final BiFunction<WebGateRouterProperty.RouterProducer, MqttPahoClientFactory, MqttClientMessageHandler> mqttMessageClientProvider) {
-            return mqttMessageClientProvider.apply(globalRouterEndpoint, globalMqttClientFactory);
+            return mqttMessageClientProvider.apply(mqttProducerRouterEndpoint, mqttClientFactory);
         }
 
         @Bean
@@ -92,35 +91,48 @@ public class WebGateServiceConfiguration {
         }
 
         @Bean
-        public IntegrationFlow mqttInFlow(final MessageProducerSupport messageProducerSupport) {
+        @Description("MQTT integration flow configuration bean")
+        public IntegrationFlow mqttIntegrationFlow(final MessageProducerSupport messageProducerSupport,
+                                                   final LoggingHandler logger) {
             return IntegrationFlows.from(messageProducerSupport)
                     .transform(p -> p + ", received from MQTT")
-                    //.handle(logger())
+                    .handle("messageConsumerService", "handleHere")
+                    .handle(logger)
                     .get();
         }
 
         @Bean
-        public MessageProducerSupport messageProducerSupport(final MqttPahoClientFactory globalMqttClientFactory) {
-            final MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("siSampleConsumer", globalMqttClientFactory, "Promise");
-            adapter.setCompletionTimeout(5000);
-            adapter.setConverter(new DefaultPahoMessageConverter());
-            adapter.setQos(1);
-            return adapter;
+        @Description("MQTT logging handler configuration bean")
+        public LoggingHandler logger() {
+            final LoggingHandler loggingHandler = new LoggingHandler("INFO");
+            loggingHandler.setLoggerName("MqttConsumer");
+            return loggingHandler;
         }
 
-//        @Bean
-//        @Description("Global router endpoint configuration bean")
-//        public WebGateRouterProperty.RouterProducer globalRouterEndpoint(final RouterConfigurationProvider configurationProvider) {
-//            return configurationProvider.getOrThrow(WEBGATE_GLOBAL_ENDPOINT_KEY);
-//        }
+        @Bean
+        public MessageProducerSupport messageProducerSupport(final WebGateRouterProperty.RouterConsumer mqttConsumerRouterEndpoint,
+                                                             final MqttPahoClientFactory globalMqttClientFactory,
+                                                             final BiFunction<WebGateRouterProperty.RouterConsumer, MqttPahoClientFactory, MqttPahoMessageDrivenChannelAdapter> mqttConsumerProvider) {
+            return mqttConsumerProvider.apply(mqttConsumerRouterEndpoint, globalMqttClientFactory);
+        }
 
         @Bean
-        @Description("Global router endpoint configuration bean")
-        public MqttPahoClientFactory globalMqttClientFactory(final WebGateRouterProperty.RouterProducer globalRouterEndpoint,
-                                                             final Function<WebGateRouterProperty.RouterProducer, MqttConnectOptions> mqttConnectOptionsProvider,
-                                                             final Function<MqttConnectOptions, MqttPahoClientFactory> mqttClientFactoryProvider) {
-            final MqttConnectOptions connectOptions = mqttConnectOptionsProvider.apply(globalRouterEndpoint);
-            return mqttClientFactoryProvider.apply(connectOptions);
+        @Description("MQTT router client factory configuration bean")
+        public MqttPahoClientFactory mqttClientFactory(final WebGateRouterProperty.RouterProducer mqttProducerRouterEndpoint,
+                                                       final Function<WebGateRouterProperty.RouterProducer, MqttPahoClientFactory> mqttClientFactoryProvider) {
+            return mqttClientFactoryProvider.apply(mqttProducerRouterEndpoint);
+        }
+
+        @Bean
+        @Description("MQTT router producer configuration bean")
+        public WebGateRouterProperty.RouterProducer mqttProducerRouterEndpoint(final RouterConfigurationProvider<WebGateRouterProperty.RouterProducer> mqttProducerRouterConfigurationProvider) {
+            return mqttProducerRouterConfigurationProvider.getOrThrow(MQTT_GLOBAL_ENDPOINT_KEY);
+        }
+
+        @Bean
+        @Description("MQTT router consumer configuration bean")
+        public WebGateRouterProperty.RouterConsumer mqttConsumerRouterEndpoint(final RouterConfigurationProvider<WebGateRouterProperty.RouterConsumer> mqttConsumerRouterConfigurationProvider) {
+            return mqttConsumerRouterConfigurationProvider.getOrThrow(MQTT_GLOBAL_ENDPOINT_KEY);
         }
     }
 }

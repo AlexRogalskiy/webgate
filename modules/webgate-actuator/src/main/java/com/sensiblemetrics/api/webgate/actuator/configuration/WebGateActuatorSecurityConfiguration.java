@@ -1,6 +1,6 @@
 package com.sensiblemetrics.api.webgate.actuator.configuration;
 
-import com.sensiblemetrics.api.webgate.actuator.property.WsActuatorSecurityProperty;
+import com.sensiblemetrics.api.webgate.actuator.property.WebGateActuatorSecurityProperty;
 import com.sensiblemetrics.api.webgate.commons.exception.SecurityConfigurationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Slf4j
 @Configuration
-@EnableConfigurationProperties(WsActuatorSecurityProperty.class)
+@EnableConfigurationProperties(WebGateActuatorSecurityProperty.class)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 @Description("SensibleMetrics Web Service Actuator Security configuration")
 public abstract class WebGateActuatorSecurityConfiguration {
@@ -26,11 +26,11 @@ public abstract class WebGateActuatorSecurityConfiguration {
      */
     @Configuration(proxyBeanMethods = false)
     @RequiredArgsConstructor
-    @ConditionalOnProperty(prefix = WsActuatorSecurityProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = WebGateActuatorSecurityProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "true")
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     @Description("Authentication Actuator Web Security configuration adapter")
     public static class AuthActuatorSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-        private final WsActuatorSecurityProperty property;
+        private final WebGateActuatorSecurityProperty property;
 
         /**
          * {@inheritDoc}
@@ -58,7 +58,7 @@ public abstract class WebGateActuatorSecurityConfiguration {
      * Actuator empty {@link WebSecurityConfigurerAdapter} implementation
      */
     @Configuration(proxyBeanMethods = false)
-    @ConditionalOnProperty(prefix = WsActuatorSecurityProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = WebGateActuatorSecurityProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "false", matchIfMissing = true)
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     @Description("NoAuthentication Actuator Web Security configuration adapter")
     public static class NoAuthActuatorSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {

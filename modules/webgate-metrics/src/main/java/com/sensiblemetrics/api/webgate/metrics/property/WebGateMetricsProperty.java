@@ -1,6 +1,5 @@
 package com.sensiblemetrics.api.webgate.metrics.property;
 
-import com.google.common.collect.Lists;
 import com.sensiblemetrics.api.webgate.commons.constraint.NullOrNotBlank;
 import com.sensiblemetrics.api.webgate.commons.constraint.NullOrNotEmpty;
 import io.micrometer.core.instrument.Tag;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.DEFAULT_PROPERTY_DELIMITER;
 import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.DEFAULT_PROPERTY_PREFIX;
 
@@ -39,7 +39,7 @@ public class WebGateMetricsProperty {
     /**
      * Default {@link List} of {@link String} simple common tags
      */
-    private static final List<String> DEFAULT_SIMPLE_COMMON_TAGS = Lists.newArrayList("scope", "webgate");
+    private static final List<String> DEFAULT_SIMPLE_COMMON_TAGS = newArrayList("scope", "webgate");
 
     /**
      * Default metrics handlers
@@ -184,7 +184,6 @@ public class WebGateMetricsProperty {
         public static final String PROPERTY_PREFIX = WebGateMetricsProperty.PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "handlers";
         public static final String TRACKING_TIME_PROPERTY_PREFIX = PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "tracking-time";
         public static final String MONITORING_TIME_PROPERTY_PREFIX = PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "monitoring-time";
-        public static final String HEALTH_STATUS_EXPORTER_PROPERTY_PREFIX = PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "health-status-exporter";
 
         /**
          * Tracking time handler
@@ -201,14 +200,6 @@ public class WebGateMetricsProperty {
         @NestedConfigurationProperty
         @NotNull(message = "{property.metrics.handlers.monitoring-time.notNull}")
         private Handler monitoringTime = new Handler();
-
-        /**
-         * Health status exporter handler
-         */
-        @Valid
-        @NestedConfigurationProperty
-        @NotNull(message = "{property.metrics.handlers.health-status-exporter.notNull}")
-        private Handler healthStatusExporter = new Handler();
     }
 
     /**

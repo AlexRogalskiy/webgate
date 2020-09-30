@@ -36,7 +36,7 @@ public abstract class WebGateExecutorConfiguration {
     @RequiredArgsConstructor
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     @Description("SensibleMetrics Web Service Task Executor configuration")
-    public static class WsTaskExecutorConfiguration implements AsyncConfigurer {
+    public static class WebGateTaskExecutorConfiguration implements AsyncConfigurer {
         /**
          * Default async task executor bean naming convention
          */

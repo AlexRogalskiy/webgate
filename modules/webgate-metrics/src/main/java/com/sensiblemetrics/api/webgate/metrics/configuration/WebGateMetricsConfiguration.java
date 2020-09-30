@@ -3,7 +3,6 @@ package com.sensiblemetrics.api.webgate.metrics.configuration;
 import com.sensiblemetrics.api.webgate.commons.helper.OptionalConsumer;
 import com.sensiblemetrics.api.webgate.metrics.aspect.MonitoringTimeAspect;
 import com.sensiblemetrics.api.webgate.metrics.aspect.TrackingTimeAspect;
-import com.sensiblemetrics.api.webgate.metrics.meter.DataSourceStatusMeterBinder;
 import com.sensiblemetrics.api.webgate.metrics.property.WebGateMetricsProperty;
 import io.github.mweirauch.micrometer.jvm.extras.ProcessMemoryMetrics;
 import io.github.mweirauch.micrometer.jvm.extras.ProcessThreadMetrics;
@@ -26,7 +25,6 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,7 +32,7 @@ import java.util.stream.Stream;
 
 @Configuration
 @EnableAspectJAutoProxy
-@Import({WebGateMetricsConfigurerAdapter.class, WsMetricsHealthStatusExporterConfiguration.class})
+@Import({WebGateMetricsConfigurerAdapter.class})
 @ConditionalOnProperty(prefix = WebGateMetricsProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(WebGateMetricsProperty.class)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
@@ -131,20 +129,6 @@ public abstract class WebGateMetricsConfiguration {
     public MeterFilter excludeMeterFilter(final WebGateMetricsConfigurerAdapter configurerAdapter,
                                           final WebGateMetricsProperty metricsProperty) {
         return MeterFilter.deny(configurerAdapter.createMeterTagPredicate(metricsProperty.getPatterns().getExclude()));
-    }
-
-    @Bean(METER_REGISTRY_DATASOURCE_METER_PROBE_BEAN_NAME)
-    @ConditionalOnMissingBean(name = METER_REGISTRY_DATASOURCE_METER_PROBE_BEAN_NAME)
-    @Description("Actuator datasource status probe configuration bean")
-    @ConditionalOnProperty(prefix = WebGateMetricsProperty.MeterProperty.METER_PROPERTY_PREFIX, name = "datasource")
-    public Function<DataSource, DataSourceStatusMeterBinder> dataSourceStatusProbe(final WebGateMetricsProperty metricsProperty) {
-        return dataSource -> {
-            final WebGateMetricsProperty.MeterProperty meterProperty = metricsProperty.getMeters().get("datasource");
-            final String name = meterProperty.getName();
-            final String description = meterProperty.getDescription();
-            final List<Tag> tags = meterProperty.getTags();
-            return new DataSourceStatusMeterBinder(dataSource, name, description, tags);
-        };
     }
 
     @RequiredArgsConstructor

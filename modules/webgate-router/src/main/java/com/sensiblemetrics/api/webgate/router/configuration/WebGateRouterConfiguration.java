@@ -1,8 +1,12 @@
 package com.sensiblemetrics.api.webgate.router.configuration;
 
+import com.sensiblemetrics.api.webgate.commons.exception.RouterConfigurationException;
 import com.sensiblemetrics.api.webgate.router.client.MqttClientMessageHandler;
 import com.sensiblemetrics.api.webgate.router.property.WebGateRouterProperty;
+import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,6 +24,7 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
+import org.springframework.integration.mqtt.support.MqttMessageConverter;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,15 +43,22 @@ public abstract class WebGateRouterConfiguration {
      * Default bean naming conventions
      */
     public static final String MQTT_CONNECT_OPTIONS_PROVIDER_BEAN_NAME = "mqttConnectOptionsProvider";
+
     public static final String MQTT_CLIENT_FACTORY_PROVIDER_BEAN_NAME = "mqttClientFactoryProvider";
+    public static final String MQTT_CLIENT_FACTORY_CUSTOMIZER_BEAN_NAME = "mqttClientFactoryCustomizer";
+
+    public static final String MQTT_BLOCKING_CLIENT_PROVIDER_BEAN_NAME = "mqttBlockingClientProvider";
+    public static final String MQTT_BLOCKING_CLIENT_CUSTOMIZER_BEAN_NAME = "mqttBlockingClientCustomizer";
 
     public static final String MQTT_PRODUCER_PROVIDER_BEAN_NAME = "mqttProducerProvider";
-    public static final String MQTT_CONSUMER_PROVIDER_BEAN_NAME = "mqttConsumerProvider";
     public static final String MQTT_PRODUCER_CUSTOMIZER_BEAN_NAME = "mqttProducerCustomizer";
+
+    public static final String MQTT_CONSUMER_PROVIDER_BEAN_NAME = "mqttConsumerProvider";
     public static final String MQTT_CONSUMER_CUSTOMIZER_BEAN_NAME = "mqttConsumerCustomizer";
 
     public static final String MQTT_PRODUCER_ROUTER_PROVIDER_BEAN_NAME = "mqttProducerRouterConfigurationProvider";
     public static final String MQTT_CONSUMER_ROUTER_PROVIDER_BEAN_NAME = "mqttConsumerRouterConfigurationProvider";
+    public static final String MQTT_MESSAGE_CONVERTER_BEAN_NAME = "mqttMessageConverter";
 
     @Bean(MQTT_CONNECT_OPTIONS_PROVIDER_BEAN_NAME)
     @ConditionalOnMissingBean(name = MQTT_CONNECT_OPTIONS_PROVIDER_BEAN_NAME)
@@ -66,15 +78,49 @@ public abstract class WebGateRouterConfiguration {
         };
     }
 
+    @Bean(MQTT_BLOCKING_CLIENT_PROVIDER_BEAN_NAME)
+    @ConditionalOnMissingBean(name = MQTT_BLOCKING_CLIENT_PROVIDER_BEAN_NAME)
+    @Description("MQTT connect options provider bean")
+    public Function<WebGateRouterProperty.RouterProducer, MqttClient> mqttBlockingClientProvider(final MqttClientCustomizers customizers) {
+        return producerProperty -> {
+            try {
+                final MqttClient mqttClient = new MqttClient(producerProperty.getServerUri(), producerProperty.getClientId());
+                return customizers.customize(producerProperty, mqttClient);
+            } catch (MqttException e) {
+                throw new RouterConfigurationException(e);
+            }
+        };
+    }
+
+    @Bean(MQTT_BLOCKING_CLIENT_CUSTOMIZER_BEAN_NAME)
+    @ConditionalOnMissingBean(name = MQTT_BLOCKING_CLIENT_CUSTOMIZER_BEAN_NAME)
+    @Description("MQTT client customizer bean")
+    public <T extends MqttClient> MqttClientCustomizer<T> mqttBlockingClientCustomizer(final Function<WebGateRouterProperty.RouterProducer, MqttConnectOptions> mqttConnectOptionsProvider) {
+        return (producerProperty, messageProducer) -> {
+            try {
+                messageProducer.connect(mqttConnectOptionsProvider.apply(producerProperty));
+            } catch (MqttException e) {
+                throw new RouterConfigurationException(e);
+            }
+        };
+    }
+
     @Bean(MQTT_CLIENT_FACTORY_PROVIDER_BEAN_NAME)
     @ConditionalOnMissingBean(name = MQTT_CLIENT_FACTORY_PROVIDER_BEAN_NAME)
     @Description("MQTT client factory provider bean")
-    public Function<MqttConnectOptions, MqttPahoClientFactory> mqttClientFactoryProvider() {
-        return connectOptions -> {
+    public Function<WebGateRouterProperty.RouterProducer, MqttPahoClientFactory> mqttClientFactoryProvider(final MqttClientFactoryCustomizers customizers) {
+        return producerProperty -> {
             final DefaultMqttPahoClientFactory clientFactory = new DefaultMqttPahoClientFactory();
-            clientFactory.setConnectionOptions(connectOptions);
-            return clientFactory;
+            return customizers.customize(producerProperty, clientFactory);
         };
+    }
+
+    @Bean(MQTT_CLIENT_FACTORY_CUSTOMIZER_BEAN_NAME)
+    @ConditionalOnMissingBean(name = MQTT_CLIENT_FACTORY_CUSTOMIZER_BEAN_NAME)
+    @Description("MQTT client factory customizer bean")
+    public <T extends DefaultMqttPahoClientFactory> MqttClientFactoryCustomizer<T> mqttClientFactoryCustomizer(final Function<WebGateRouterProperty.RouterProducer, MqttConnectOptions> mqttConnectOptionsProvider) {
+        return (producerProperty, messageProducer) ->
+                messageProducer.setConnectionOptions(mqttConnectOptionsProvider.apply(producerProperty));
     }
 
     @Bean(MQTT_PRODUCER_PROVIDER_BEAN_NAME)
@@ -90,11 +136,14 @@ public abstract class WebGateRouterConfiguration {
     @Bean(MQTT_PRODUCER_CUSTOMIZER_BEAN_NAME)
     @ConditionalOnMissingBean(name = MQTT_PRODUCER_CUSTOMIZER_BEAN_NAME)
     @Description("MQTT message producer customizer bean")
-    public <T extends MqttPahoMessageHandler> MqttMessageProducerCustomizer<T> mqttProducerCustomizer() {
+    public <T extends MqttPahoMessageHandler> MqttMessageProducerCustomizer<T> mqttProducerCustomizer(final ObjectProvider<MqttMessageConverter> mqttMessageConverter) {
         return (producerProperty, messageProducer) -> {
+            mqttMessageConverter.ifAvailable(messageProducer::setConverter);
             messageProducer.setAsync(producerProperty.isAsync());
-            messageProducer.setDefaultQos(producerProperty.getDefaultQos());
+            messageProducer.setLoggingEnabled(producerProperty.isLoggingEnabled());
+            messageProducer.setDefaultQos(producerProperty.getQualityOfService());
             messageProducer.setCompletionTimeout(producerProperty.getCompletionTimeout().toMillis());
+            messageProducer.setDisconnectCompletionTimeout(producerProperty.getKeepAliveInterval().toMillis());
         };
     }
 
@@ -111,11 +160,12 @@ public abstract class WebGateRouterConfiguration {
     @Bean(MQTT_CONSUMER_CUSTOMIZER_BEAN_NAME)
     @ConditionalOnMissingBean(name = MQTT_CONSUMER_CUSTOMIZER_BEAN_NAME)
     @Description("MQTT message consumer customizer bean")
-    public <T extends MqttPahoMessageDrivenChannelAdapter> MqttMessageConsumerCustomizer<T> mqttConsumerCustomizer() {
+    public <T extends MqttPahoMessageDrivenChannelAdapter> MqttMessageConsumerCustomizer<T> mqttConsumerCustomizer(final ObjectProvider<MqttMessageConverter> mqttMessageConverter) {
         return (consumerProperty, messageConsumer) -> {
-            messageConsumer.setCompletionTimeout(5000);
-            messageConsumer.setConverter(new DefaultPahoMessageConverter());
-            messageConsumer.setQos(1);
+            mqttMessageConverter.ifAvailable(messageConsumer::setConverter);
+            messageConsumer.setQos(consumerProperty.getQualityOfService());
+            messageConsumer.setCompletionTimeout(consumerProperty.getCompletionTimeout().toMillis());
+            messageConsumer.setDisconnectCompletionTimeout(consumerProperty.getKeepAliveInterval().toMillis());
         };
     }
 
@@ -131,6 +181,13 @@ public abstract class WebGateRouterConfiguration {
     @Description("MQTT consumer router configuration provider bean")
     public RouterConfigurationProvider<WebGateRouterProperty.RouterConsumer> mqttConsumerRouterConfigurationProvider(final WebGateRouterProperty property) {
         return routerName -> property.getConsumers().get(routerName);
+    }
+
+    @Bean(MQTT_MESSAGE_CONVERTER_BEAN_NAME)
+    @ConditionalOnMissingBean(name = MQTT_MESSAGE_CONVERTER_BEAN_NAME)
+    @Description("MQTT message converter bean")
+    public MqttMessageConverter mqttMessageConverter() {
+        return new DefaultPahoMessageConverter();
     }
 
     @Bean

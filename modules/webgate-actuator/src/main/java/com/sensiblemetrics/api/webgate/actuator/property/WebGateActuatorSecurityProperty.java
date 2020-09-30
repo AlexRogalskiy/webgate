@@ -23,10 +23,10 @@ import static com.sensiblemetrics.api.webgate.commons.utils.ServiceUtils.streamO
 @Data
 @Validated
 @Accessors(chain = true)
-@ConfigurationProperties(prefix = WsActuatorSecurityProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
+@ConfigurationProperties(prefix = WebGateActuatorSecurityProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 @Description("SensibleMetrics Web Service Actuator Security configuration properties")
-public class WsActuatorSecurityProperty {
+public class WebGateActuatorSecurityProperty {
     /**
      * Default actuator security property prefix
      */

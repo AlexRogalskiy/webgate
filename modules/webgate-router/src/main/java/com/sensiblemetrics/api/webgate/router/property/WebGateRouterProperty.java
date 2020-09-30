@@ -63,19 +63,35 @@ public class WebGateRouterProperty {
     @Accessors(chain = true)
     public static class Router {
         /**
-         * Producer client identifier
+         * Router client identifier
          */
         @NullOrNotBlank(message = "{property.router.client-id.nullOrNotBlank}")
         private String clientId = "mqttPubClient";
 
         /**
-         * Producer completion timeout
+         * Router completion timeout (in millis)
          */
         @DurationUnit(ChronoUnit.MILLIS)
         @DurationFormat(DurationStyle.SIMPLE)
         @DurationMin(message = "{property.router.completion-timeout.min}")
         @NotNull(message = "{property.router.completion-timeout.notNull}")
         private Duration completionTimeout = Duration.ofMillis(20_000);
+
+        /**
+         * Router keep alive timeout (in millis)
+         */
+        @DurationUnit(ChronoUnit.MILLIS)
+        @DurationFormat(DurationStyle.SIMPLE)
+        @DurationMin(message = "{property.router.keep-alive-interval.min}")
+        @NotNull(message = "{property.router.keep-alive-interval.notNull}")
+        private Duration keepAliveInterval = Duration.ofMillis(30_000);
+
+        /**
+         * Router quality of service
+         */
+        @NumberFormat(style = NumberFormat.Style.NUMBER)
+        @PositiveOrZero(message = "{property.router.quality-of-service.positiveOrZero}")
+        private int qualityOfService = 1;
 
         /**
          * Enable/disable router ({@code true} by default)
@@ -105,6 +121,11 @@ public class WebGateRouterProperty {
         private String password;
 
         /**
+         * Enable/disable logging
+         */
+        private boolean loggingEnabled = false;
+
+        /**
          * Enable/disable producer clean session
          */
         private boolean cleanSession = false;
@@ -122,26 +143,19 @@ public class WebGateRouterProperty {
         private boolean async = true;
 
         /**
-         * Producer keep alive timeout
-         */
-        @DurationUnit(ChronoUnit.MILLIS)
-        @DurationFormat(DurationStyle.SIMPLE)
-        @DurationMin(message = "{property.router.producers.keep-alive-interval.min}")
-        @NotNull(message = "{property.router.producers.keep-alive-interval.notNull}")
-        private Duration keepAliveInterval = Duration.ofMillis(30_000);
-
-        /**
          * Producer default topic
          */
         @NullOrNotBlank(message = "{property.router.producers.default-topic.nullOrNotBlank}")
         private String defaultTopic;
 
         /**
-         * Producer quality of service
+         * Returns {@link String} server URI
+         *
+         * @return {@link String} server URI
          */
-        @NumberFormat(style = NumberFormat.Style.NUMBER)
-        @PositiveOrZero(message = "{property.router.producers.default-qos.positiveOrZero}")
-        private int defaultQos = 1;
+        public String getServerUri() {
+            return this.serverURIs.get(0);
+        }
 
         /**
          * Returns {@link String} array of server URIs
@@ -163,10 +177,10 @@ public class WebGateRouterProperty {
     @Accessors(chain = true)
     public static class RouterConsumer extends Router {
         /**
-         * Topic mappings
+         * Consumer topic mappings
          */
         @Valid
-        @NotEmpty(message = "{property.router.producers.topics.notEmpty}")
+        @NotEmpty(message = "{property.router.consumers.topics.notEmpty}")
         private List<@NotBlank String> topics;
 
         /**

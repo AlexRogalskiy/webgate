@@ -84,9 +84,9 @@
         <module>modules/webgate-executor</module>
         <module>modules/webgate-logger</module>
         <module>modules/webgate-metrics</module>
-        <module>modules/webgate-mqtt-adapter</module>
         <module>modules/webgate-router</module>
         <module>modules/webgate-security</module>
+        <module>modules/webgate-mqtt-adapter</module>
     </modules>
 
     <properties>
@@ -1376,7 +1376,7 @@
         <profile>
             <id>versionizer</id>
             <properties>
-                <version-java-package>com.sensiblemetrics.api.ws</version-java-package>
+                <version-java-package>com.sensiblemetrics.api.webgate</version-java-package>
             </properties>
             <build>
                 <plugins>
