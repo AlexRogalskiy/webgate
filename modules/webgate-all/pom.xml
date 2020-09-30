@@ -10,7 +10,7 @@
         <relativePath>../../</relativePath>
     </parent>
 
-    <name>com.sensiblemetrics.api</name>
+    <name>com.sensiblemetrics.api.webgate.all</name>
     <description>WebGate All Bundle</description>
     <artifactId>webgate-all</artifactId>
     <packaging>jar</packaging>

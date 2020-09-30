@@ -10,7 +10,7 @@
         <relativePath>../../</relativePath>
     </parent>
 
-    <name>com.sensiblemetrics.api</name>
+    <name>com.sensiblemetrics.api.webgate.actuator</name>
     <description>WebGate Actuator API</description>
     <artifactId>webgate-actuator</artifactId>
     <packaging>jar</packaging>
