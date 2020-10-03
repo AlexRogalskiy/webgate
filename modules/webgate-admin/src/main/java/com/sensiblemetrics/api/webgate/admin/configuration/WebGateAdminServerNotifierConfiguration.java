@@ -25,7 +25,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnProperty(prefix = WebGateAdminProperty.Handlers.NOTIFICATION_PROPERTY_PREFIX, value = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = WebGateAdminProperty.Handlers.NOTIFIER_PROPERTY_PREFIX, value = "enabled", havingValue = "true", matchIfMissing = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 @Description("SensibleMetrics WebGate Admin Server notifier configuration")
 public abstract class WebGateAdminServerNotifierConfiguration {

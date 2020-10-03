@@ -53,7 +53,7 @@ public class WebGateAdminProperty {
          * Default handlers property prefix
          */
         public static final String PROPERTY_PREFIX = WebGateAdminProperty.PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "handlers";
-        public static final String NOTIFICATION_PROPERTY_PREFIX = PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "notifier";
+        public static final String NOTIFIER_PROPERTY_PREFIX = PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "notifier";
 
         /**
          * Notification handler

@@ -5,7 +5,7 @@
 
     <groupId>com.sensiblemetrics.api</groupId>
     <artifactId>webgate-parent</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>com.sensiblemetrics.api.webgate</name>
@@ -93,6 +93,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <revision>0.1.0-SNAPSHOT</revision>
 
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>

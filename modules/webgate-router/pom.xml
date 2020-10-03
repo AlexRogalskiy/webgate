@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.sensiblemetrics.api</groupId>
         <artifactId>webgate-parent</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../../</relativePath>
     </parent>
 

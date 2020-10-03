@@ -33,3 +33,4 @@ ENV TERM xterm
 
 # Run microservice process.
 ENTRYPOINT [ "./entrypoint.sh" ]
+CMD ["container started"]
