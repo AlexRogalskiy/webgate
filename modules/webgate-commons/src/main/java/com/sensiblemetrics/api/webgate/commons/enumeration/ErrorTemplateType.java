@@ -1,5 +1,6 @@
 package com.sensiblemetrics.api.webgate.commons.enumeration;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
@@ -14,19 +15,20 @@ import static java.util.Arrays.asList;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorTemplateType {
+    INVALID_DATA("error-0020", "error.data.invalid"),
     SERVICE_UNAVAILABLE("error-0030", "error.service.unavailable"),
-    SERVICE_OPERATION_ERROR("error-0040", "error.operation.invalid"),
+    SERVICE_OPERATION_ERROR("error-0040", "error.service.operation.invalid"),
     BAD_REQUEST("error-0050", "error.request.invalid"),
-    DOCUMENT_PROCESSING_ERROR("error-0060", "error.document.processing.invalid"),
     INVALID_ENDPOINT_CONFIGURATION("error-0070", "error.endpoint.configuration.invalid"),
     INVALID_ENDPOINT_SECURITY_CONFIGURATION("error-0080", "error.endpoint.security.configuration.invalid");
 
     /**
      * Default {@link String} error code
      */
+    @JsonValue
     private final String errorCode;
     /**
-     * Default {@link String} error messsage
+     * Default {@link String} error message
      */
     private final String errorMessage;
 
@@ -39,9 +41,9 @@ public enum ErrorTemplateType {
     @Nullable
     public static ErrorTemplateType findByCode(final String value) {
         return Arrays.stream(values())
-                .filter(type -> type.getErrorCode().equalsIgnoreCase(value))
-                .findFirst()
-                .orElse(null);
+            .filter(type -> type.getErrorCode().equalsIgnoreCase(value))
+            .findFirst()
+            .orElse(null);
     }
 
     /**
@@ -56,6 +58,6 @@ public enum ErrorTemplateType {
 
     @Override
     public String toString() {
-        return this.errorCode;
+        return String.format("Error: {%s}, message: {%s}", this.errorCode, this.errorMessage);
     }
 }

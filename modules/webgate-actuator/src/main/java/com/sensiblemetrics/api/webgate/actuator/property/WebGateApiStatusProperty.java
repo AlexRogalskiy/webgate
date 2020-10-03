@@ -27,7 +27,7 @@ import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = WebGateApiStatusProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Api Status configuration properties")
+@Description("SensibleMetrics WebGate Api Status configuration properties")
 public class WebGateApiStatusProperty {
     /**
      * Default api status property prefix

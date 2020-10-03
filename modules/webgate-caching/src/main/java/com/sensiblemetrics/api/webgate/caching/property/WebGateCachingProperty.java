@@ -16,7 +16,7 @@ import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = WebGateCachingProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Commons Web Service Cahing configuration properties")
+@Description("SensibleMetrics WebGate Caching configuration properties")
 public class WebGateCachingProperty {
     /**
      * Default caching property prefix

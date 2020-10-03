@@ -1,6 +1,6 @@
 package com.sensiblemetrics.api.webgate.admin.property;
 
-import com.sensiblemetrics.api.webgate.commons.constraint.NullOrNotBlank;
+import com.sensiblemetrics.api.webgate.validation.constraint.annotation.NullOrNotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -21,7 +21,7 @@ import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = WebGateAdminProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Admin configuration properties")
+@Description("SensibleMetrics Admin configuration properties")
 public class WebGateAdminProperty {
     /**
      * Default admin property prefix
@@ -53,15 +53,15 @@ public class WebGateAdminProperty {
          * Default handlers property prefix
          */
         public static final String PROPERTY_PREFIX = WebGateAdminProperty.PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "handlers";
-        public static final String NOTIFICATION_PROPERTY_PREFIX = PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "notification";
+        public static final String NOTIFICATION_PROPERTY_PREFIX = PROPERTY_PREFIX + DEFAULT_PROPERTY_DELIMITER + "notifier";
 
         /**
          * Notification handler
          */
         @Valid
         @NestedConfigurationProperty
-        @NotNull(message = "{property.admin.handlers.notification.notNull}")
-        private Handler notification = new Handler();
+        @NotNull(message = "{property.admin.handlers.notifier.notNull}")
+        private Handler notifier = new Handler();
     }
 
     /**

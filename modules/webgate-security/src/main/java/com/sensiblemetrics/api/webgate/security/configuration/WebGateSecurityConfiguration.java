@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableConfigurationProperties(WebGateSecurityProperty.class)
 @ConditionalOnProperty(prefix = WebGateSecurityProperty.PROPERTY_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Commons Web Service Security configuration")
+@Description("SensibleMetrics WebGate Security configuration")
 public abstract class WebGateSecurityConfiguration {
 
     /**

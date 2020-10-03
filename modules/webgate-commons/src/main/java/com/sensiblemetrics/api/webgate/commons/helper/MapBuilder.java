@@ -14,6 +14,7 @@ import java.util.*;
  * @param <V> The value type of the map.
  */
 public class MapBuilder<K, V> implements Map<K, V> {
+
     private final Map<K, V> map;
 
     /**

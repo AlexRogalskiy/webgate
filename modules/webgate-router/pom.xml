@@ -32,6 +32,12 @@
             <version>${sensiblemetrics.version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-validation</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- Eclipse Paho library dependencies -->
         <dependency>
@@ -56,6 +62,16 @@
                     <groupId>com.fasterxml.jackson.module</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- SensibleMetrics test library dependencies -->
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-commons</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <classifier>tests</classifier>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

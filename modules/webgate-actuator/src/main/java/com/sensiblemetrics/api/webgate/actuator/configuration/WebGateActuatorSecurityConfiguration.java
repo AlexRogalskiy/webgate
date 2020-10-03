@@ -18,7 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableConfigurationProperties(WebGateActuatorSecurityProperty.class)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Actuator Security configuration")
+@Description("SensibleMetrics WebGate Actuator Security configuration")
 public abstract class WebGateActuatorSecurityConfiguration {
 
     /**
@@ -28,8 +28,8 @@ public abstract class WebGateActuatorSecurityConfiguration {
     @RequiredArgsConstructor
     @ConditionalOnProperty(prefix = WebGateActuatorSecurityProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "true")
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    @Description("Authentication Actuator Web Security configuration adapter")
-    public static class AuthActuatorSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+    @Description("Authority Actuator Web Security configuration adapter")
+    public static class AuthorityActuatorSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
         private final WebGateActuatorSecurityProperty property;
 
         /**
@@ -40,17 +40,17 @@ public abstract class WebGateActuatorSecurityConfiguration {
         @Override
         protected void configure(final HttpSecurity http) {
             this.property.getEndpoints()
-                    .forEach((key, value) -> {
-                                try {
-                                    http.requestMatcher(EndpointRequest.to(value.getNamesAsArray()))
-                                            .authorizeRequests(requests -> requests.anyRequest().hasAnyRole(value.getRolesAsArray()));
-                                    log.info("Adding security for actuator path: {} with roles: {}", value.getNames(), value.getRoles());
-                                } catch (Exception e) {
-                                    log.error("Cannot process actuator endpoints configuration, message: {}", e.getMessage());
-                                    throw new SecurityConfigurationException(e);
-                                }
-                            }
-                    );
+                .forEach((key, value) -> {
+                        try {
+                            http.requestMatcher(EndpointRequest.to(value.getNamesAsArray()))
+                                .authorizeRequests(requests -> requests.anyRequest().hasAnyRole(value.getRolesAsArray()));
+                            log.info("Adding security for actuator path: {} with roles: {}", value.getNames(), value.getRoles());
+                        } catch (Exception e) {
+                            log.error("Cannot process actuator endpoints configuration, message: {}", e.getMessage());
+                            throw new SecurityConfigurationException(e);
+                        }
+                    }
+                );
         }
     }
 
@@ -60,8 +60,8 @@ public abstract class WebGateActuatorSecurityConfiguration {
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnProperty(prefix = WebGateActuatorSecurityProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "false", matchIfMissing = true)
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    @Description("NoAuthentication Actuator Web Security configuration adapter")
-    public static class NoAuthActuatorSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+    @Description("NoAuthority Actuator Web Security configuration adapter")
+    public static class NoAuthorityActuatorSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
         /**
          * {@inheritDoc}
          *
@@ -70,7 +70,7 @@ public abstract class WebGateActuatorSecurityConfiguration {
         @Override
         protected void configure(final HttpSecurity http) throws Exception {
             http.requestMatcher(EndpointRequest.toAnyEndpoint())
-                    .authorizeRequests(requests -> requests.anyRequest().permitAll());
+                .authorizeRequests(requests -> requests.anyRequest().permitAll());
         }
     }
 }

@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Aspect
 @RequiredArgsConstructor
-@Description("Web Service Monitoring Component aspect configuration")
+@Description("WebGate Monitoring Component aspect configuration")
 public class MonitoringTimeAspect {
     /**
      * Tags status markers

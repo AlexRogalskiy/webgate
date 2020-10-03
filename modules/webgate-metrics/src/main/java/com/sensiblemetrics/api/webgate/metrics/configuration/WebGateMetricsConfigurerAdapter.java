@@ -14,7 +14,7 @@ import static com.sensiblemetrics.api.webgate.commons.utils.ServiceUtils.streamO
 
 @Component
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Metrics configurer adapter")
+@Description("SensibleMetrics WebGate Metrics configurer adapter")
 public class WebGateMetricsConfigurerAdapter {
     /**
      * Returns meter tags {@link Predicate} by input {@link Set} collection of patterns

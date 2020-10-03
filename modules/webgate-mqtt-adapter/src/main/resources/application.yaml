@@ -33,7 +33,7 @@ spring:
   profiles:
     include: document, addressing, cloud
   application:
-    name: "WebGate-MQTT-Adapter"
+    name: "WebGate-MQTT-Adapter-WebService"
   messages:
     basename: i18n/common_messages, i18n/messages
     # 1 hour

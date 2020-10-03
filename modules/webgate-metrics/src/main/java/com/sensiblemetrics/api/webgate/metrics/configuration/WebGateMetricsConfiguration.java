@@ -3,6 +3,7 @@ package com.sensiblemetrics.api.webgate.metrics.configuration;
 import com.sensiblemetrics.api.webgate.commons.helper.OptionalConsumer;
 import com.sensiblemetrics.api.webgate.metrics.aspect.MonitoringTimeAspect;
 import com.sensiblemetrics.api.webgate.metrics.aspect.TrackingTimeAspect;
+import com.sensiblemetrics.api.webgate.metrics.meter.DataSourceStatusMeterBinder;
 import com.sensiblemetrics.api.webgate.metrics.property.WebGateMetricsProperty;
 import io.github.mweirauch.micrometer.jvm.extras.ProcessMemoryMetrics;
 import io.github.mweirauch.micrometer.jvm.extras.ProcessThreadMetrics;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,7 +38,7 @@ import java.util.stream.Stream;
 @ConditionalOnProperty(prefix = WebGateMetricsProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(WebGateMetricsProperty.class)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Metrics configuration")
+@Description("SensibleMetrics WebGate Metrics configuration")
 public abstract class WebGateMetricsConfiguration {
     /**
      * Default metrics bean naming conventions
@@ -81,15 +83,15 @@ public abstract class WebGateMetricsConfiguration {
     @Description("Metrics common tags customizer bean")
     public MeterRegistryCustomizer<MeterRegistry> metricsCommonTagsCustomizer(final WebGateMetricsProperty metricsProperty) {
         return registry -> OptionalConsumer.of(metricsProperty.getDefaults().getTags())
-                .ifPresent(value -> registry.config().commonTags(value))
-                .ifNotPresent(() -> registry.config().commonTags(metricsProperty.getDefaults().getSimpleTagsAsArray()));
+            .ifPresent(value -> registry.config().commonTags(value))
+            .ifNotPresent(() -> registry.config().commonTags(metricsProperty.getDefaults().getSimpleTagsAsArray()));
     }
 
     @Bean(METER_REGISTRY_WEB_MVC_TAGS_CONTRIBUTOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = METER_REGISTRY_WEB_MVC_TAGS_CONTRIBUTOR_BEAN_NAME)
     @Description("Metrics Web MVC tags contributor bean")
     public WebMvcTagsContributor webMvcTagsContributor(final WebGateMetricsProperty metricsProperty) {
-        return new CustomWebMvcTagsContributor(metricsProperty);
+        return new DefaultWebMvcTagsContributor(metricsProperty);
     }
 
     @Bean(METER_REGISTRY_TIMED_ASPECT_BEAN_NAME)
@@ -131,8 +133,22 @@ public abstract class WebGateMetricsConfiguration {
         return MeterFilter.deny(configurerAdapter.createMeterTagPredicate(metricsProperty.getPatterns().getExclude()));
     }
 
+    @Bean(METER_REGISTRY_DATASOURCE_METER_PROBE_BEAN_NAME)
+    @ConditionalOnMissingBean(name = METER_REGISTRY_DATASOURCE_METER_PROBE_BEAN_NAME)
+    @Description("Actuator datasource status probe configuration bean")
+    @ConditionalOnProperty(prefix = WebGateMetricsProperty.MeterProperty.METER_PROPERTY_PREFIX, name = "datasource")
+    public Function<DataSource, DataSourceStatusMeterBinder> dataSourceStatusProbe(final WebGateMetricsProperty metricsProperty) {
+        return dataSource -> {
+            final WebGateMetricsProperty.MeterProperty meterProperty = metricsProperty.getMeters().get("datasource");
+            final String name = meterProperty.getName();
+            final String description = meterProperty.getDescription();
+            final List<Tag> tags = meterProperty.getTags();
+            return new DataSourceStatusMeterBinder(dataSource, name, description, tags);
+        };
+    }
+
     @RequiredArgsConstructor
-    public static class CustomWebMvcTagsContributor implements WebMvcTagsContributor {
+    public static class DefaultWebMvcTagsContributor implements WebMvcTagsContributor {
         private final WebGateMetricsProperty metricsProperty;
 
         /**
@@ -153,11 +169,11 @@ public abstract class WebGateMetricsConfiguration {
                                      final Object handler,
                                      final Throwable exception) {
             return Optional.ofNullable(request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE))
-                    .map(v -> (Map<String, String>) v)
-                    .map(Map::entrySet)
-                    .map(Collection::stream)
-                    .map(this.mapToList())
-                    .orElseGet(Collections::emptyList);
+                .map(v -> (Map<String, String>) v)
+                .map(Map::entrySet)
+                .map(Collection::stream)
+                .map(this.mapToList())
+                .orElseGet(Collections::emptyList);
         }
 
         /**

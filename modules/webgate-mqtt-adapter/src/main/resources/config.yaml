@@ -14,7 +14,7 @@ webgate:
 
   metrics:
     defaults:
-      description: WebGate Generator Service
+      description: WebGate MQTT Adapter Service
       tags:
         - key: scope
           value: ${spring.profiles.active:local}

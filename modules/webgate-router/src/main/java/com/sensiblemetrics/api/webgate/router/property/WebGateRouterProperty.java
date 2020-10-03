@@ -1,6 +1,6 @@
 package com.sensiblemetrics.api.webgate.router.property;
 
-import com.sensiblemetrics.api.webgate.commons.constraint.NullOrNotBlank;
+import com.sensiblemetrics.api.webgate.validation.constraint.annotation.NullOrNotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

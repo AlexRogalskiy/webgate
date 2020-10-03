@@ -25,13 +25,13 @@
         <!-- SensibleMetrics library dependencies -->
         <dependency>
             <groupId>com.sensiblemetrics.api</groupId>
-            <artifactId>webgate-admin</artifactId>
+            <artifactId>webgate-actuator</artifactId>
             <version>${sensiblemetrics.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.sensiblemetrics.api</groupId>
-            <artifactId>webgate-actuator</artifactId>
+            <artifactId>webgate-admin</artifactId>
             <version>${sensiblemetrics.version}</version>
             <scope>compile</scope>
         </dependency>
@@ -44,12 +44,6 @@
         <dependency>
             <groupId>com.sensiblemetrics.api</groupId>
             <artifactId>webgate-commons</artifactId>
-            <version>${sensiblemetrics.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sensiblemetrics.api</groupId>
-            <artifactId>webgate-mqtt-adapter</artifactId>
             <version>${sensiblemetrics.version}</version>
             <scope>compile</scope>
         </dependency>
@@ -73,6 +67,12 @@
         </dependency>
         <dependency>
             <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-mqtt-adapter</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
             <artifactId>webgate-router</artifactId>
             <version>${sensiblemetrics.version}</version>
             <scope>compile</scope>
@@ -80,6 +80,12 @@
         <dependency>
             <groupId>com.sensiblemetrics.api</groupId>
             <artifactId>webgate-security</artifactId>
+            <version>${sensiblemetrics.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sensiblemetrics.api</groupId>
+            <artifactId>webgate-validation</artifactId>
             <version>${sensiblemetrics.version}</version>
             <scope>compile</scope>
         </dependency>

@@ -28,16 +28,16 @@ import java.util.stream.Stream;
 @Slf4j
 @Aspect
 @ConditionalOnProperty(prefix = WebGateLoggingProperty.Handlers.REPORTING_PROPERTY_PREFIX, value = "enabled", havingValue = "true", matchIfMissing = true)
-@Description("Web Service Reporting data aspect configuration")
+@Description("WebGate reporting data aspect configuration")
 public class ReportingDataAspect {
 
     /**
      * Pointcut that matches {@link Repository}, {@link Service}, {@link RestController} and {@link Controller} components
      */
     @Pointcut("within(@org.springframework.stereotype.Repository *)" +
-            " || within(@org.springframework.stereotype.Service *)" +
-            " || within(@org.springframework.web.bind.annotation.RestController *)" +
-            " || within(@org.springframework.stereotype.Controller *)")
+        " || within(@org.springframework.stereotype.Service *)" +
+        " || within(@org.springframework.web.bind.annotation.RestController *)" +
+        " || within(@org.springframework.stereotype.Controller *)")
     public void componentPointcut() {
     }
 
@@ -45,7 +45,7 @@ public class ReportingDataAspect {
      * Pointcut that matches {@link LoggingInfo}
      */
     @Pointcut("@annotation(com.sensiblemetrics.api.webgate.logger.annotation.LoggingInfo)" +
-            "|| @within(com.sensiblemetrics.api.webgate.logger.annotation.LoggingInfo)")
+        "|| @within(com.sensiblemetrics.api.webgate.logger.annotation.LoggingInfo)")
     public void loggingInfoPointcut() {
     }
 
@@ -100,14 +100,14 @@ public class ReportingDataAspect {
         final LoggingInfo classLoggingInfoAnnotation = joinPoint.getTarget().getClass().getAnnotation(LoggingInfo.class);
 
         Stream.of(methodLoggingInfoAnnotation, classLoggingInfoAnnotation)
-                .filter(Objects::nonNull)
-                .filter(annotation -> annotation.value().isVerbose())
-                .findAny()
-                .ifPresent(v -> {
-                    if (log.isInfoEnabled()) {
-                        log.info("Joint point info >>> {}", joinPoint.toLongString());
-                    }
-                });
+            .filter(Objects::nonNull)
+            .filter(annotation -> annotation.value().isVerbose())
+            .findAny()
+            .ifPresent(v -> {
+                if (log.isInfoEnabled()) {
+                    log.info("Joint point info >>> {}", joinPoint.toLongString());
+                }
+            });
 
         this.logRequestAttributes(joinPoint);
     }
@@ -120,18 +120,18 @@ public class ReportingDataAspect {
     private void logRequestAttributes(final JoinPoint joinPoint) {
         final ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         log.info(">>> Request attributes: url: {}, method: {}, remote address: {}, method: {}, arguments: {}",
-                this.getRequest(requestAttributes)
-                        .map(HttpServletRequest::getRequestURL)
-                        .map(StringBuffer::toString)
-                        .orElse(null),
-                this.getRequest(requestAttributes)
-                        .map(HttpServletRequest::getMethod)
-                        .orElse(null),
-                this.getRequest(requestAttributes)
-                        .map(HttpServletRequest::getRemoteAddr)
-                        .orElse(null),
-                joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),
-                Arrays.toString(joinPoint.getArgs())
+            this.getRequest(requestAttributes)
+                .map(HttpServletRequest::getRequestURL)
+                .map(StringBuffer::toString)
+                .orElse(null),
+            this.getRequest(requestAttributes)
+                .map(HttpServletRequest::getMethod)
+                .orElse(null),
+            this.getRequest(requestAttributes)
+                .map(HttpServletRequest::getRemoteAddr)
+                .orElse(null),
+            joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),
+            Arrays.toString(joinPoint.getArgs())
         );
     }
 

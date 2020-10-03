@@ -23,7 +23,7 @@ import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = WebGateGracefulShutdownProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Graceful Shutdown configuration properties")
+@Description("SensibleMetrics WebGate Graceful Shutdown configuration properties")
 public class WebGateGracefulShutdownProperty {
     /**
      * Default graceful shutdown property prefix

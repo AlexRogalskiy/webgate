@@ -1,7 +1,7 @@
 package com.sensiblemetrics.api.webgate.actuator.property;
 
-import com.sensiblemetrics.api.webgate.commons.constraint.NullOrNotEmpty;
 import com.sensiblemetrics.api.webgate.commons.helper.MapBuilder;
+import com.sensiblemetrics.api.webgate.validation.constraint.annotation.NullOrNotEmpty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -23,7 +23,7 @@ import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = WebGateApiStatusInfoProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Info Api Status configuration properties")
+@Description("SensibleMetrics WebGate Info Api Status configuration properties")
 public class WebGateApiStatusInfoProperty {
     /**
      * Default info api status property prefix
@@ -71,10 +71,10 @@ public class WebGateApiStatusInfoProperty {
          * Default {@link Map} collection of metric entries
          */
         private static final Map<String, String> DEFAULT_METRIC_ENTRIES = MapBuilder
-                .map(String.class, String.class)
-                .entry("process-uptime", PROCESS_UPTIME_METRIC)
-                .entry("logback-events", LOGBACK_EVENTS_METRIC)
-                .build();
+            .map(String.class, String.class)
+            .entry("process-uptime", PROCESS_UPTIME_METRIC)
+            .entry("logback-events", LOGBACK_EVENTS_METRIC)
+            .build();
 
         /**
          * Default {@link Map} collection of metrics

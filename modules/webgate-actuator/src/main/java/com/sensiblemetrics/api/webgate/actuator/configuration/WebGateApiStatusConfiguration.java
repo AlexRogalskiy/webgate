@@ -2,11 +2,11 @@ package com.sensiblemetrics.api.webgate.actuator.configuration;
 
 import com.sensiblemetrics.api.webgate.actuator.indicator.GracefulShutdownHealthIndicator;
 import com.sensiblemetrics.api.webgate.actuator.indicator.StatefulHealthIndicator;
-import com.sensiblemetrics.api.webgate.actuator.indicator.TaskSchedulerHealthIndicator;
 import com.sensiblemetrics.api.webgate.actuator.indicator.StatusInfoContributor;
+import com.sensiblemetrics.api.webgate.actuator.indicator.TaskSchedulerHealthIndicator;
+import com.sensiblemetrics.api.webgate.actuator.property.WebGateApiStatusInfoProperty;
 import com.sensiblemetrics.api.webgate.actuator.property.WebGateApiStatusProperty;
 import com.sensiblemetrics.api.webgate.actuator.property.WebGateGracefulShutdownProperty;
-import com.sensiblemetrics.api.webgate.actuator.property.WebGateApiStatusInfoProperty;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -19,12 +19,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @Import(StatusInfoContributor.class)
 @ConditionalOnProperty(prefix = WebGateApiStatusProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties({
-        WebGateGracefulShutdownProperty.class,
-        WebGateApiStatusProperty.class,
-        WebGateApiStatusInfoProperty.class
+    WebGateGracefulShutdownProperty.class,
+    WebGateApiStatusProperty.class,
+    WebGateApiStatusInfoProperty.class
 })
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Api Status configuration")
+@Description("SensibleMetrics WebGate Api Status configuration")
 public abstract class WebGateApiStatusConfiguration {
 
     @Bean

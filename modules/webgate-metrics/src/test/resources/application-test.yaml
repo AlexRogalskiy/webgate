@@ -1,4 +1,4 @@
-# SensibleMetrics Web Service Metrics test configuration
+# SensibleMetrics WebGate Metrics test configuration
 ---
 spring:
   messages:
@@ -19,10 +19,14 @@ spring:
 webgate:
   metrics:
     defaults:
-      description: WebGate MQTT Adapter Service
+      description: WebGate Service
       tags:
         - key: scope
-          value: WebGate
+          value: webgate
+    meters:
+      datasource:
+        name: webgate.datasource
+        description: DataSource status probe
     handlers:
       tracking-time:
         enabled: true

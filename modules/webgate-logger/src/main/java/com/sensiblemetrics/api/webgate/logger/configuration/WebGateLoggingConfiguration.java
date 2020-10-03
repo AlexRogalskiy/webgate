@@ -16,14 +16,14 @@ import org.springframework.context.annotation.*;
 @ConditionalOnProperty(prefix = WebGateLoggingProperty.PROPERTY_PREFIX, value = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(WebGateLoggingProperty.class)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Logging configuration")
+@Description("SensibleMetrics WebGate Logging configuration")
 public abstract class WebGateLoggingConfiguration {
 
     @Bean
     @ConditionalOnBean(WebGateLoggingProperty.class)
     @ConditionalOnClass(LogHeadersToMdcFilter.class)
     @ConditionalOnProperty(prefix = WebGateLoggingProperty.Handlers.HEADERS_PROPERTY_PREFIX, name = "enabled", havingValue = "true")
-    @Description("MDC filter headers logging configuration bean")
+    @Description("MDC filter logging configuration bean")
     public LogHeadersToMdcFilter logHeadersToMDCFilter(final WebGateLoggingProperty property) {
         return new LogHeadersToMdcFilter(property.getHandlers().getHeaders());
     }

@@ -1,7 +1,7 @@
 package com.sensiblemetrics.api.webgate.metrics.property;
 
-import com.sensiblemetrics.api.webgate.commons.constraint.NullOrNotBlank;
-import com.sensiblemetrics.api.webgate.commons.constraint.NullOrNotEmpty;
+import com.sensiblemetrics.api.webgate.validation.constraint.annotation.NullOrNotBlank;
+import com.sensiblemetrics.api.webgate.validation.constraint.annotation.NullOrNotEmpty;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.config.NamingConvention;
 import lombok.Data;
@@ -30,7 +30,7 @@ import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = WebGateMetricsProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Commons Web Service Metrics configuration properties")
+@Description("SensibleMetrics WebGate Metrics configuration properties")
 public class WebGateMetricsProperty {
     /**
      * Default metrics property prefix

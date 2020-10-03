@@ -25,7 +25,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 @Import(TaskExecutionAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "spring.task.execution", value = "enabled", havingValue = "true", matchIfMissing = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Executor configuration")
+@Description("SensibleMetrics WebGate Executor configuration")
 public abstract class WebGateExecutorConfiguration {
     /**
      * Default thread pool task executor bean naming convention

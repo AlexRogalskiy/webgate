@@ -1,5 +1,6 @@
 package com.sensiblemetrics.api.webgate.logger.property;
 
+import com.sensiblemetrics.api.webgate.validation.constraint.annotation.NullOrNotEmpty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Collections;
 import java.util.Set;
 
 import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.DEFAULT_PROPERTY_DELIMITER;
@@ -25,7 +25,7 @@ import static com.sensiblemetrics.api.webgate.commons.property.PropertySettings.
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = WebGateLoggingProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Commons Web Service Logging configuration properties")
+@Description("SensibleMetrics WebGate Logging configuration properties")
 public class WebGateLoggingProperty {
     /**
      * Default logging property prefix
@@ -97,8 +97,8 @@ public class WebGateLoggingProperty {
          * Default headers
          */
         @Valid
-        @NotNull(message = "{property.logging.headers.names.notNull}")
-        private Set<@NotBlank String> names = Collections.emptySet();
+        @NullOrNotEmpty(message = "{property.logging.headers.names.nullOrNotEmpty}")
+        private Set<@NotBlank String> names;
 
         /**
          * Default header pattern

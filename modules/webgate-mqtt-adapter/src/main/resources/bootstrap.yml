@@ -1,8 +1,8 @@
-# SensibleMetrics Document Generator WebService Bootstrap configuration
+# SensibleMetrics WebGate MQTT Adapter Bootstrap configuration
 ---
 spring:
   application:
-    name: "Document-Generator-WebService"
+    name: "WebGate-MQTT-Adapter-WebService"
   cloud:
     config:
       enabled: false
@@ -21,7 +21,7 @@ spring:
 spring:
   profiles: compose
   application:
-    name: "Document-Generator-WebService"
+    name: "WebGate-MQTT-Adapter-WebService"
   cloud:
     config:
       enabled: true

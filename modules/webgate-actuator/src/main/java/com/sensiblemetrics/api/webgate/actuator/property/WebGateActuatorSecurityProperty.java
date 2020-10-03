@@ -1,6 +1,6 @@
 package com.sensiblemetrics.api.webgate.actuator.property;
 
-import com.sensiblemetrics.api.webgate.commons.constraint.NullOrNotEmpty;
+import com.sensiblemetrics.api.webgate.validation.constraint.annotation.NullOrNotEmpty;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -25,7 +25,7 @@ import static com.sensiblemetrics.api.webgate.commons.utils.ServiceUtils.streamO
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = WebGateActuatorSecurityProperty.PROPERTY_PREFIX, ignoreInvalidFields = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Actuator Security configuration properties")
+@Description("SensibleMetrics WebGate Actuator Security configuration properties")
 public class WebGateActuatorSecurityProperty {
     /**
      * Default actuator security property prefix

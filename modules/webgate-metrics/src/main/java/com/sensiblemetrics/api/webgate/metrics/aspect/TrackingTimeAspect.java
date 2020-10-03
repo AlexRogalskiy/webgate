@@ -17,7 +17,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @Slf4j
 @Aspect
-@Description("Web Service Tracking time aspect configuration")
+@Description("WebGate Tracking time aspect configuration")
 public class TrackingTimeAspect {
 
     /**
@@ -45,12 +45,12 @@ public class TrackingTimeAspect {
 
         log.info("Method time tracking >>> point: {} with time rate: {}", joinPoint, millisToShortDHMS(stopWatch.getTime()));
         log.info("Method time tracking >>> class: {}, method: {}, args: {}, execTime: {}",
-                joinPoint.getTarget().getClass().getName(),
-                joinPoint.getSignature().getName(),
-                (joinPoint.getArgs() == null || joinPoint.getArgs().length == 0)
-                        ? "None"
-                        : Arrays.toString(joinPoint.getArgs()),
-                stopWatch.getTime() + " millis"
+            joinPoint.getTarget().getClass().getName(),
+            joinPoint.getSignature().getName(),
+            (joinPoint.getArgs() == null || joinPoint.getArgs().length == 0)
+                ? "None"
+                : Arrays.toString(joinPoint.getArgs()),
+            stopWatch.getTime() + " millis"
         );
         log.info("Method time tracking >>> point: {} with time rate: {}", joinPoint, MILLISECONDS.convert(stopWatch.getTime(), annotation.timeUnit()));
         return returnProceed;
@@ -63,7 +63,7 @@ public class TrackingTimeAspect {
         final long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration));
 
         return (days == 0)
-                ? String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                : String.format("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
+            ? String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            : String.format("%dd%02d:%02d:%02d", days, hours, minutes, seconds);
     }
 }

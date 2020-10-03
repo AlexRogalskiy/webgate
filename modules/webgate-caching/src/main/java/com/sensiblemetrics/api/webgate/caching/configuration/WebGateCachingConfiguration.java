@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Role;
 @EnableConfigurationProperties(WebGateCachingProperty.class)
 @ConditionalOnProperty(prefix = WebGateCachingProperty.PROPERTY_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-@Description("SensibleMetrics Web Service Caching configuration")
+@Description("SensibleMetrics WebGate Caching configuration")
 public abstract class WebGateCachingConfiguration {
     /**
      * Default caching bean naming convention

@@ -37,6 +37,7 @@
             <organizationUrl>https://www.sensible-metrics.com/</organizationUrl>
             <roles>
                 <role>developer</role>
+                <role>architect</role>
             </roles>
             <timezone>+3</timezone>
             <properties>
@@ -61,7 +62,7 @@
                 <sendOnSuccess>false</sendOnSuccess>
                 <sendOnWarning>false</sendOnWarning>
                 <configuration>
-                    <address>gitHub-actions@sensiblemetrics.io</address>
+                    <address>gitHub-actions@sensiblemetrics.com</address>
                 </configuration>
             </notifier>
         </notifiers>
@@ -86,6 +87,7 @@
         <module>modules/webgate-metrics</module>
         <module>modules/webgate-router</module>
         <module>modules/webgate-security</module>
+        <module>modules/webgate-validation</module>
         <module>modules/webgate-mqtt-adapter</module>
     </modules>
 
@@ -228,7 +230,6 @@
         <modernizer.version>2.1.0</modernizer.version>
         <plexus-utils.version>3.3.0</plexus-utils.version>
 
-        <vavr.version>0.9.0</vavr.version>
         <slf4j-api.version>1.7.30</slf4j-api.version>
 
         <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
@@ -306,6 +307,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -437,24 +442,6 @@
             <version>${modernizer.version}</version>
         </dependency>
 
-        <!-- Hibernate validator library dependencies -->
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml</groupId>
-                    <artifactId>classmate</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <version>${hibernate-validator.version}</version>
-        </dependency>
-
         <!-- Lombok library dependencies -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -462,20 +449,6 @@
             <version>${lombok.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
-        </dependency>
-
-        <!-- Slf4j library dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
-        </dependency>
-
-        <!-- Vavr library dependencies -->
-        <dependency>
-            <groupId>io.vavr</groupId>
-            <artifactId>vavr</artifactId>
-            <version>${vavr.version}</version>
         </dependency>
 
         <!-- Spring Boot test library dependencies -->
@@ -1418,7 +1391,7 @@
 
         <!-- SortPom profile -->
         <profile>
-            <id>sort-pom</id>
+            <id>sortpom</id>
             <build>
                 <plugins>
                     <plugin>
@@ -1869,7 +1842,8 @@
                                 <verbose>false</verbose>
                                 <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
                                 <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                                <generateGitPropertiesFilename>target/generated-sources/versions/version.properties
+                                <generateGitPropertiesFilename>
+                                    ${project.build.directory}/generated-sources/versions/version.properties
                                 </generateGitPropertiesFilename>
                                 <gitDescribe>
                                     <skip>false</skip>
@@ -1880,13 +1854,8 @@
                                 <skipPoms>false</skipPoms>
                                 <runOnlyOnce>true</runOnlyOnce>
                                 <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                                <verbose>false</verbose>
                                 <prefix>git</prefix>
-                                <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                                <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
-                                </generateGitPropertiesFilename>
-                                <dateFormat>yyyy-MM-dd'T'HH:mm:ss.SSSZ</dateFormat>
-                                <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                                <dateFormat>${maven.build.timestamp.format}</dateFormat>
                                 <includeOnlyProperties>
                                     <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
                                     <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
@@ -2298,6 +2267,7 @@
                                         </dependencySourceIncludes>
                                         <attach>false</attach>
                                         <quiet>true</quiet>
+                                        <stylesheetfile>${basedir}/src/main/javadoc/spring-javadoc.css</stylesheetfile>
                                         <links>
                                             <link>
                                                 http://docs.spring.io/spring-framework/docs/${spring-boot.version}/javadoc-api/
@@ -2305,33 +2275,6 @@
                                             <link>http://docs.spring.io/spring-shell/docs/current/api/</link>
                                         </links>
                                     </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>xml-maven-plugin</artifactId>
-                            <version>${maven-xml-plugin.version}</version>
-                            <configuration>
-                                <transformationSets>
-                                    <transformationSet>
-                                        <dir>${project.build.directory}/generated-resources/xml-javadoc</dir>
-                                        <includes>
-                                            <include>${project.artifactId}-${project.version}-javadoc.xml</include>
-                                        </includes>
-                                        <outputDir>${project.build.directory}/generated-resources/xml-javadoc
-                                        </outputDir>
-                                    </transformationSet>
-                                </transformationSets>
-                            </configuration>
-                            <executions>
-                                <execution>
-                                    <id>transform-xmljavadoc</id>
-                                    <goals>
-                                        <goal>transform</goal>
-                                    </goals>
-                                    <phase>generate-resources</phase>
                                 </execution>
                             </executions>
                         </plugin>
@@ -2350,9 +2293,30 @@
                                         <artifacts>
                                             <artifact>
                                                 <file>
+                                                    ${project.build.directory}/${project.artifactId}-${project.version}.jar
+                                                </file>
+                                                <type>jar</type>
+                                            </artifact>
+                                            <artifact>
+                                                <file>
+                                                    ${project.build.directory}/${project.artifactId}-${project.version}-javadoc.jar
+                                                </file>
+                                                <type>jar</type>
+                                                <classifier>javadoc</classifier>
+                                            </artifact>
+                                            <artifact>
+                                                <file>
+                                                    ${project.build.directory}/${project.artifactId}-${project.version}-sources.jar
+                                                </file>
+                                                <type>jar</type>
+                                                <classifier>sources</classifier>
+                                            </artifact>
+                                            <artifact>
+                                                <file>
                                                     ${project.build.directory}/${project.artifactId}-${project.version}.zip
                                                 </file>
                                                 <type>zip;zip.type=docs;zip.deployed=false</type>
+                                                <classifier>zip</classifier>
                                             </artifact>
                                         </artifacts>
                                     </configuration>
@@ -2366,40 +2330,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- Assembly profile -->
-        <profile>
-            <id>assembly</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <version>${maven-assembly-plugin.version}</version>
-                        <configuration>
-                            <appendAssemblyId>true</appendAssemblyId>
-                            <tarLongFileMode>posix</tarLongFileMode>
-                            <finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
-                            <descriptors>
-                                <descriptor>${project.basedir}/assembly/package.xml</descriptor>
-                            </descriptors>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>package</id>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <phase>package</phase>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -2454,10 +2384,12 @@
                 <jdk>(,8]</jdk>
             </activation>
             <properties>
-                <compilerArgs>-XDignore.symbol.file
+                <compilerArgs>
+                    -XDignore.symbol.file
                     -Xlint:all
                 </compilerArgs>
                 <java.version>8</java.version>
+                <asm.version>9.0</asm.version>
             </properties>
             <build>
                 <plugins>
@@ -2489,7 +2421,7 @@
                             <dependency>
                                 <groupId>org.ow2.asm</groupId>
                                 <artifactId>asm</artifactId>
-                                <version>9.0</version>
+                                <version>${asm.version}</version>
                             </dependency>
                         </dependencies>
                         <executions>
@@ -2516,12 +2448,22 @@
                 <jdk>[11,)</jdk>
             </activation>
             <properties>
-                <compilerArgs>-XX:-OmitStackTraceInFastThrow
+                <compilerArgs>
+                    -XX:-OmitStackTraceInFastThrow
                     --illegal-access=permit
                     --enable-preview
                 </compilerArgs>
                 <java.version>11</java.version>
+                <asm.version>9.0</asm.version>
             </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.glassfish.jaxb</groupId>
+                    <artifactId>jaxb-runtime</artifactId>
+                </dependency>
+            </dependencies>
+
             <build>
                 <plugins>
                     <plugin>
@@ -2558,7 +2500,7 @@
                             <dependency>
                                 <groupId>org.ow2.asm</groupId>
                                 <artifactId>asm</artifactId>
-                                <version>9.0</version>
+                                <version>${asm.version}</version>
                             </dependency>
                         </dependencies>
                         <executions>
