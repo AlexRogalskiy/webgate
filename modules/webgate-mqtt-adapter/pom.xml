@@ -18,7 +18,7 @@
     <inceptionYear>2020</inceptionYear>
 
     <properties>
-        <spring-boot-thin.version>1.0.25.RELEASE</spring-boot-thin.version>
+        <spring-boot-thin.version>1.0.29.RELEASE</spring-boot-thin.version>
         <spring-integration.version>5.3.2.RELEASE</spring-integration.version>
 
         <eclipse-paho-client.version>1.2.5</eclipse-paho-client.version>
