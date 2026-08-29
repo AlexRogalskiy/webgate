@@ -229,7 +229,7 @@
         <mockito-junit-jupiter.version>3.12.4</mockito-junit-jupiter.version>
         <mockito.version>3.12.4</mockito.version>
         <modernizer.version>2.1.0</modernizer.version>
-        <plexus-utils.version>3.3.0</plexus-utils.version>
+        <plexus-utils.version>3.6.2</plexus-utils.version>
 
         <slf4j-api.version>1.7.30</slf4j-api.version>
 
